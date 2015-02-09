@@ -4,12 +4,17 @@ using log4net;
 using rift.net.Models;
 using rift.net.Models.Guilds;
 using System.Linq;
+using System.Collections.Generic;
+using System.Net;
 
 namespace RiftChat
 {
 	class MainClass
 	{
 		private static readonly ILog logger = LogManager.GetLogger (typeof(MainClass));
+
+		private static RiftClientSecured securedClient;
+		private static RiftChatClient chatClient;
 
 		public static void Main (string[] args)
 		{
@@ -46,9 +51,9 @@ namespace RiftChat
 			}
 
 			// Create a new client
-			var riftClient = new RiftClientSecured (session);
+			securedClient = new RiftClientSecured (session);
 
-			var characters = riftClient.ListCharacters ();
+			var characters = securedClient.ListCharacters ();
 			var character = characters.FirstOrDefault (x => x.FullName == arguments.Character);
 
 			if (character == null) {
@@ -61,8 +66,7 @@ namespace RiftChat
 				return;
 			}
 
-			var chatClient = new RiftChatClient (session, character);
-			var client = new RiftClientSecured (session);
+			chatClient = new RiftChatClient (session, character);
 			var waiter = new Waiter ();
 
 			chatClient.GuildChatReceived += delegate(object sender, Message e) {
@@ -91,7 +95,7 @@ namespace RiftChat
 				WriteMessage( string.Format("{0} has gone offline.", e.Character.Name), ConsoleColor.Gray );
 			};
 
-			ReportGuildStatus (character, client);
+			ReportGuildStatus (character);
 
 			// Connect
 			chatClient.Connect ();
@@ -104,13 +108,26 @@ namespace RiftChat
 			do { 
 				message = Console.ReadLine();
 
-				if(message.StartsWith("/status"))
+				if(string.IsNullOrWhiteSpace(message))
+					continue;
+
+				message = message.Trim();
+
+				if(message == "/status")
 				{
-					ReportGuildStatus( character, client );
+					ReportGuildStatus(character);
 				}
-				else if( message.StartsWith( "/online" ) )
+				else if( message == "/online" )
 				{
-					ReportOnline(character, client);
+					ReportOnline(character);
+				}
+				else if( message.StartsWith("/t "))
+				{
+					HandleTell( character, message );
+				}
+				else if( message == "/events" )
+				{
+					ReportZoneEvents();
 				}
 				else 
 				{
@@ -132,15 +149,15 @@ namespace RiftChat
 			var currentColor = Console.ForegroundColor;
 
 			Console.ForegroundColor = textColor;
-			Console.WriteLine (string.Format ("{0} {1}", dateTime == null ? DateTime.Now.ToString("HH:mm:ss") : dateTime.Value.ToString("HH:mm:ss"), message));
+			Console.WriteLine (string.Format ("{0} {1}", dateTime == null ? DateTime.Now.ToString("HH:mm:ss") : dateTime.Value.ToString("HH:mm:ss"), WebUtility.UrlDecode(message)));
 			Console.ForegroundColor = currentColor;
 		}
 
-		private static void ReportOnline( Character character, RiftClientSecured client )
+		private static void ReportOnline( Character character)
 		{
 			var currentColor = Console.ForegroundColor;
 
-			var friends = client.ListFriends (character.Id);
+			var friends = securedClient.ListFriends (character.Id);
 			var onlineFriends = friends.Where (x => x.Presence.IsOnlineInGame || x.Presence.IsOnlineOnWeb).OrderBy (x => x.Name);
 
 			Console.WriteLine ("There are {0} friends online currently", onlineFriends.Count());
@@ -149,7 +166,7 @@ namespace RiftChat
 			}
 
 			if (character.Guild != null) {
-				var guildies = client.ListGuildmates (character.Guild.Id);
+				var guildies = securedClient.ListGuildmates (character.Guild.Id);
 				var onlineGuildies = guildies.Where (x => x.Presence.IsOnlineInGame).OrderBy (x => x.Name);
 
 				Console.WriteLine ("There are {0} guildies online currently", onlineGuildies.Count());
@@ -159,18 +176,18 @@ namespace RiftChat
 			}
 		}
 
-		private static void ReportGuildStatus( Character character, RiftClientSecured client )
+		private static void ReportGuildStatus( Character character)
 		{
 			var currentColor = Console.ForegroundColor;
 
 			Console.ForegroundColor = ConsoleColor.Green;
 
-			var guildInfo = client.GetGuildInfo (character.Id);
+			var guildInfo = securedClient.GetGuildInfo (character.Id);
 
 			Console.WriteLine ("Welcome to <{0}>", guildInfo.Name);
 			Console.WriteLine (guildInfo.MessageOfTheDay);
 
-			var guildies = client.ListGuildmates (guildInfo.Id);
+			var guildies = securedClient.ListGuildmates (guildInfo.Id);
 			var onlineGuildies = guildies.Where (x => x.Presence.IsOnlineInGame).OrderBy (x => x.Name);
 
 			Console.WriteLine ("There are {0} guildies online currently", onlineGuildies.Count());
@@ -179,6 +196,36 @@ namespace RiftChat
 			}
 
 			Console.ForegroundColor = currentColor;
+		}
+
+		private static void HandleTell( Character character, string message )
+		{
+			var messageParts = message.Split (' ');
+
+			// If message parts does not contain two substrings, then we've got a problem
+			if (messageParts.Length < 2)
+				throw new Exception ("Unable to parse message text");
+
+			if (messageParts [0] != "/t")
+				throw new Exception ("This does not look like a tell");
+
+			var recipientName = messageParts [1].ToLower ();
+
+			// Lookup the recipient from the friends and guild list
+			var recipient = ListFriendsAndGuildies (character).FirstOrDefault (x => x.Name.ToLower () == recipientName);
+
+			var actualMessage = string.Join (" ", messageParts, 2, messageParts.Length - 2);
+
+			var result = chatClient.SendWhisper (recipient, actualMessage);
+		}
+
+		private static List<Contact> ListFriendsAndGuildies( Character character )
+		{
+			return securedClient.ListFriends (character.Id).Union (securedClient.ListGuildmates (character.Guild.Id)).ToList();
+		}
+
+		private static void ReportZoneEvents()
+		{
 		}
 	}
 }
