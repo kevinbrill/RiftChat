@@ -127,7 +127,7 @@ namespace RiftChat
 				}
 				else if( message == "/events" )
 				{
-					ReportZoneEvents();
+					ReportZoneEvents(character);
 				}
 				else 
 				{
@@ -224,8 +224,25 @@ namespace RiftChat
 			return securedClient.ListFriends (character.Id).Union (securedClient.ListGuildmates (character.Guild.Id)).ToList();
 		}
 
-		private static void ReportZoneEvents()
+		private static void ReportZoneEvents(Character character)
 		{
+			var client = new RiftClient ();
+
+			var shards = client.ListShards ().Where(x=>x.Id >= 1700).OrderBy (x => x.Name);
+
+			foreach (var shard in shards) {
+				var zones = client.ListZones (shard.Id).Where (x => x.Event != null).OrderBy (y => y.Event.ActiveSince);
+
+				if (zones.Count() == 0)
+					continue;
+
+				Console.WriteLine (shard.Name);
+
+				foreach(var zone in zones)
+				{
+					Console.WriteLine ("\t{0}: {1} (active since {2})", zone.Name, zone.Event.Name, zone.Event.ActiveSince.ToShortTimeString ());
+				}
+			}
 		}
 	}
 }
