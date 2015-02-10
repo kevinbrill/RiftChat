@@ -95,13 +95,23 @@ namespace RiftChat
 				WriteMessage( string.Format("{0} has gone offline.", e.Character.Name), ConsoleColor.Gray );
 			};
 
-			ReportGuildStatus (character);
+			chatClient.Connecting += (object sender, EventArgs e) => {
+				Console.WriteLine( "Connecting to chat server..." );
+			};
+
+			chatClient.Connected += (object sender, EventArgs e) => {
+				Console.WriteLine( "Connected!" );
+			};
 
 			// Connect
 			chatClient.Connect ();
 
 			// Start listening
 			chatClient.Listen ();
+
+			if (character.Guild != null) {
+				ReportGuildStatus (character);
+			}
 
 			string message;
 
@@ -128,6 +138,10 @@ namespace RiftChat
 				else if( message == "/events" )
 				{
 					ReportZoneEvents(character);
+				}
+				else if( message == "/friends" )
+				{
+					ReportFriends(character);
 				}
 				else 
 				{
@@ -242,6 +256,26 @@ namespace RiftChat
 				{
 					Console.WriteLine ("\t{0}: {1} (active since {2})", zone.Name, zone.Event.Name, zone.Event.ActiveSince.ToShortTimeString ());
 				}
+			}
+		}
+
+		private static void ReportFriends(Character character)
+		{
+			var friends = securedClient.ListFriends (character.Id).ToList ();
+
+			Console.WriteLine ("{0} has {1} total friends", character.FullName, friends.Count);
+
+			var onlineFriends = friends.Where (x => x.Presence.IsOnlineOnWeb || x.Presence.IsOnlineInGame).OrderBy(x=>x.FullName);
+			var offlineFriends = friends.Where (x => !x.Presence.IsOnlineOnWeb && !x.Presence.IsOnlineInGame).OrderBy(x=>x.FullName);
+
+			Console.WriteLine ("Online friends:");
+			foreach (var friend in onlineFriends) {
+				Console.WriteLine ("\t{0}{1}", friend.FullName, friend.Presence.IsOnlineOnWeb ? " (m)" : "");
+			}
+
+			Console.WriteLine ("Offline friends:");
+			foreach (var friend in offlineFriends) {
+				Console.WriteLine ("\t{0}", friend.FullName);
 			}
 		}
 	}
