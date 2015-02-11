@@ -5,6 +5,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Net;
 using System.Diagnostics;
+using rift.net.Models;
 
 public partial class MainWindow: Gtk.Window
 {
@@ -30,6 +31,12 @@ public partial class MainWindow: Gtk.Window
 		var securedClient = new RiftClientSecured (session);
 
 		var bruun = securedClient.ListCharacters ().FirstOrDefault (x => x.FullName == "Bruun@Wolfsbane");
+
+		var friends = securedClient.ListFriends (bruun.Id);
+		var guildies = securedClient.ListGuildmates (bruun.Guild.Id);
+
+		PopulateContacts (this.treeview2, friends);
+		PopulateContacts (this.treeview3, guildies);
 
 		chatClient = new RiftChatClient (session, bruun);
 
@@ -114,5 +121,32 @@ public partial class MainWindow: Gtk.Window
 		} catch (Exception ex) {
 			Debug.WriteLine (ex.ToString ());
 		}
+	}
+
+	private void PopulateContacts( TreeView treeview, List<Contact> contacts )
+	{
+		var store = new ListStore (typeof(Contact));
+
+		foreach (var contact in contacts.OrderBy( x=>x.Name )) {
+			store.AppendValues (contact);
+		}
+
+		treeview.AppendColumn ("Name", new CellRendererText(), new TreeCellDataFunc(RenderContactName));
+
+		treeview.Model = store;
+	}
+
+	private void RenderContactName( TreeViewColumn column, CellRenderer cell, TreeModel model, TreeIter iter )
+	{
+		var contact = model.GetValue (iter, 0) as Contact;
+		var textCell = (cell as CellRendererText);
+
+		if (!contact.Presence.IsOnlineInGame && !contact.Presence.IsOnlineOnWeb) {
+			textCell.Foreground = "lightgray";
+		} else {
+			textCell.Foreground = "black";
+		}
+
+		textCell.Text = contact.Name;
 	}
 }

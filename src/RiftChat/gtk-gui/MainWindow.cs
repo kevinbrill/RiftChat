@@ -3,6 +3,22 @@
 
 public partial class MainWindow
 {
+	private global::Gtk.UIManager UIManager;
+	
+	private global::Gtk.Action newAction;
+	
+	private global::Gtk.HPaned hpaned1;
+	
+	private global::Gtk.VPaned vpaned1;
+	
+	private global::Gtk.ScrolledWindow GtkScrolledWindow1;
+	
+	private global::Gtk.TreeView treeview2;
+	
+	private global::Gtk.ScrolledWindow GtkScrolledWindow2;
+	
+	private global::Gtk.TreeView treeview3;
+	
 	private global::Gtk.VBox vbox2;
 	
 	private global::Gtk.ScrolledWindow GtkScrolledWindow;
@@ -19,11 +35,52 @@ public partial class MainWindow
 	{
 		global::Stetic.Gui.Initialize (this);
 		// Widget MainWindow
+		this.UIManager = new global::Gtk.UIManager ();
+		global::Gtk.ActionGroup w1 = new global::Gtk.ActionGroup ("Default");
+		this.newAction = new global::Gtk.Action ("newAction", null, null, "gtk-new");
+		w1.Add (this.newAction, null);
+		this.UIManager.InsertActionGroup (w1, 0);
+		this.AddAccelGroup (this.UIManager.AccelGroup);
 		this.Name = "MainWindow";
 		this.Title = global::Mono.Unix.Catalog.GetString ("MainWindow");
 		this.WindowPosition = ((global::Gtk.WindowPosition)(4));
 		this.AllowShrink = true;
 		// Container child MainWindow.Gtk.Container+ContainerChild
+		this.hpaned1 = new global::Gtk.HPaned ();
+		this.hpaned1.CanFocus = true;
+		this.hpaned1.Name = "hpaned1";
+		this.hpaned1.Position = 182;
+		// Container child hpaned1.Gtk.Paned+PanedChild
+		this.vpaned1 = new global::Gtk.VPaned ();
+		this.vpaned1.CanFocus = true;
+		this.vpaned1.Name = "vpaned1";
+		this.vpaned1.Position = 236;
+		// Container child vpaned1.Gtk.Paned+PanedChild
+		this.GtkScrolledWindow1 = new global::Gtk.ScrolledWindow ();
+		this.GtkScrolledWindow1.Name = "GtkScrolledWindow1";
+		this.GtkScrolledWindow1.ShadowType = ((global::Gtk.ShadowType)(1));
+		// Container child GtkScrolledWindow1.Gtk.Container+ContainerChild
+		this.treeview2 = new global::Gtk.TreeView ();
+		this.treeview2.CanFocus = true;
+		this.treeview2.Name = "treeview2";
+		this.GtkScrolledWindow1.Add (this.treeview2);
+		this.vpaned1.Add (this.GtkScrolledWindow1);
+		global::Gtk.Paned.PanedChild w3 = ((global::Gtk.Paned.PanedChild)(this.vpaned1 [this.GtkScrolledWindow1]));
+		w3.Resize = false;
+		// Container child vpaned1.Gtk.Paned+PanedChild
+		this.GtkScrolledWindow2 = new global::Gtk.ScrolledWindow ();
+		this.GtkScrolledWindow2.Name = "GtkScrolledWindow2";
+		this.GtkScrolledWindow2.ShadowType = ((global::Gtk.ShadowType)(1));
+		// Container child GtkScrolledWindow2.Gtk.Container+ContainerChild
+		this.treeview3 = new global::Gtk.TreeView ();
+		this.treeview3.CanFocus = true;
+		this.treeview3.Name = "treeview3";
+		this.GtkScrolledWindow2.Add (this.treeview3);
+		this.vpaned1.Add (this.GtkScrolledWindow2);
+		this.hpaned1.Add (this.vpaned1);
+		global::Gtk.Paned.PanedChild w6 = ((global::Gtk.Paned.PanedChild)(this.hpaned1 [this.vpaned1]));
+		w6.Resize = false;
+		// Container child hpaned1.Gtk.Paned+PanedChild
 		this.vbox2 = new global::Gtk.VBox ();
 		this.vbox2.Name = "vbox2";
 		this.vbox2.Spacing = 6;
@@ -38,8 +95,8 @@ public partial class MainWindow
 		this.textviewChat.Editable = false;
 		this.GtkScrolledWindow.Add (this.textviewChat);
 		this.vbox2.Add (this.GtkScrolledWindow);
-		global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.GtkScrolledWindow]));
-		w2.Position = 0;
+		global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.GtkScrolledWindow]));
+		w8.Position = 0;
 		// Container child vbox2.Gtk.Box+BoxChild
 		this.hbox1 = new global::Gtk.HBox ();
 		this.hbox1.Name = "hbox1";
@@ -51,8 +108,8 @@ public partial class MainWindow
 		this.entryChat.IsEditable = true;
 		this.entryChat.InvisibleChar = '•';
 		this.hbox1.Add (this.entryChat);
-		global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.entryChat]));
-		w3.Position = 0;
+		global::Gtk.Box.BoxChild w9 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.entryChat]));
+		w9.Position = 0;
 		// Container child hbox1.Gtk.Box+BoxChild
 		this.buttonSend = new global::Gtk.Button ();
 		this.buttonSend.CanDefault = true;
@@ -61,16 +118,17 @@ public partial class MainWindow
 		this.buttonSend.UseUnderline = true;
 		this.buttonSend.Label = global::Mono.Unix.Catalog.GetString ("Send");
 		this.hbox1.Add (this.buttonSend);
-		global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.buttonSend]));
-		w4.Position = 1;
-		w4.Expand = false;
-		w4.Fill = false;
+		global::Gtk.Box.BoxChild w10 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.buttonSend]));
+		w10.Position = 1;
+		w10.Expand = false;
+		w10.Fill = false;
 		this.vbox2.Add (this.hbox1);
-		global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.hbox1]));
-		w5.Position = 1;
-		w5.Expand = false;
-		w5.Fill = false;
-		this.Add (this.vbox2);
+		global::Gtk.Box.BoxChild w11 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.hbox1]));
+		w11.Position = 1;
+		w11.Expand = false;
+		w11.Fill = false;
+		this.hpaned1.Add (this.vbox2);
+		this.Add (this.hpaned1);
 		if ((this.Child != null)) {
 			this.Child.ShowAll ();
 		}
