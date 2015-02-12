@@ -82,14 +82,14 @@ namespace RiftChat
 			};
 
 			chatClient.Login +=  delegate(object sender, rift.net.Models.Action e) {
-				if( !e.InGame )
+				if( e.Location == Location.Web )
 					return;
 
 				WriteMessage( string.Format("{0} has come online.", e.Character.Name), ConsoleColor.Gray );
 			};
 
 			chatClient.Logout +=  delegate(object sender, rift.net.Models.Action e) {
-				if( !e.InGame )
+				if( e.Location == Location.Web )
 					return;
 
 				WriteMessage( string.Format("{0} has gone offline.", e.Character.Name), ConsoleColor.Gray );

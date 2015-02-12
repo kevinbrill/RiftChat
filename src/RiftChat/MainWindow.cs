@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Diagnostics;
 using rift.net.Models;
+using RiftChat.Common;
 
 public partial class MainWindow: Gtk.Window
 {
@@ -13,6 +14,8 @@ public partial class MainWindow: Gtk.Window
 	private const string GUILD_CHAT = "GuildChat";
 
 	private RiftChatClient chatClient;
+	ContactController friendsController;
+	ContactController guildiesController;
 
 	public MainWindow () : base (Gtk.WindowType.Toplevel)
 	{
@@ -32,13 +35,13 @@ public partial class MainWindow: Gtk.Window
 
 		var bruun = securedClient.ListCharacters ().FirstOrDefault (x => x.FullName == "Bruun@Wolfsbane");
 
-		var friends = securedClient.ListFriends (bruun.Id);
-		var guildies = securedClient.ListGuildmates (bruun.Guild.Id);
-
-		PopulateContacts (this.treeview2, friends);
-		PopulateContacts (this.treeview3, guildies);
+		var friends = securedClient.ListFriends (bruun.Id).OrderBy (x => x.Name).ToList();
+		var guildies = securedClient.ListGuildmates (bruun.Guild.Id).OrderBy (x => x.Name).ToList();
 
 		chatClient = new RiftChatClient (session, bruun);
+
+		friendsController = new ContactController (chatClient) { View = (IContactView)treeview2, Model = friends };
+		guildiesController = new ContactController (chatClient) { View = (IContactView)treeview3, Model = guildies };
 
 		chatClient.Connect ();
 
@@ -54,13 +57,13 @@ public partial class MainWindow: Gtk.Window
 
 		chatClient.Login += (sender, e) => {
 			Application.Invoke( delegate {
-				WriteMessage( string.Format("{0}{1} has come online.", e.Character.Name, !e.InGame ? " (m)" : ""), LOGIN_LOGOUT );
+				WriteMessage( string.Format("{0}{1} has come online.", e.Character.Name, e.Location == Location.Web ? " (m)" : ""), LOGIN_LOGOUT );
 			});
 		};
 
 		chatClient.Logout += (sender, e) => {
 			Application.Invoke( delegate {
-				WriteMessage( string.Format("{0}{1} has gone offline.", e.Character.Name, !e.InGame ? " (m)" : ""), LOGIN_LOGOUT );
+				WriteMessage( string.Format("{0}{1} has gone offline.", e.Character.Name, e.Location == Location.Web ? " (m)" : ""), LOGIN_LOGOUT );
 			});
 		};
 
@@ -121,32 +124,5 @@ public partial class MainWindow: Gtk.Window
 		} catch (Exception ex) {
 			Debug.WriteLine (ex.ToString ());
 		}
-	}
-
-	private void PopulateContacts( TreeView treeview, List<Contact> contacts )
-	{
-		var store = new ListStore (typeof(Contact));
-
-		foreach (var contact in contacts.OrderBy( x=>x.Name )) {
-			store.AppendValues (contact);
-		}
-
-		treeview.AppendColumn ("Name", new CellRendererText(), new TreeCellDataFunc(RenderContactName));
-
-		treeview.Model = store;
-	}
-
-	private void RenderContactName( TreeViewColumn column, CellRenderer cell, TreeModel model, TreeIter iter )
-	{
-		var contact = model.GetValue (iter, 0) as Contact;
-		var textCell = (cell as CellRendererText);
-
-		if (!contact.Presence.IsOnlineInGame && !contact.Presence.IsOnlineOnWeb) {
-			textCell.Foreground = "lightgray";
-		} else {
-			textCell.Foreground = "black";
-		}
-
-		textCell.Text = contact.Name;
 	}
 }

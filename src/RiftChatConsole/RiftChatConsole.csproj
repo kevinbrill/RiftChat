@@ -52,7 +52,7 @@
       <HintPath>..\packages\RestSharp.105.0.1\lib\net4\RestSharp.dll</HintPath>
     </Reference>
     <Reference Include="rift.net">
-      <HintPath>..\packages\rift.net.1.0.5519.20889\lib\net45\rift.net.dll</HintPath>
+      <HintPath>..\packages\rift.net.1.0.5521.26978\lib\net45\rift.net.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
