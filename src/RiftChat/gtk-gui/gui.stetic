@@ -35,6 +35,7 @@
               <widget class="Gtk.ScrolledWindow" id="GtkScrolledWindow1">
                 <property name="MemberName" />
                 <property name="ShadowType">In</property>
+                <property name="BorderWidth">3</property>
                 <child>
                   <widget class="Gtk.TreeView" id="treeview2">
                     <property name="MemberName" />
@@ -51,6 +52,7 @@
               <widget class="Gtk.ScrolledWindow" id="GtkScrolledWindow2">
                 <property name="MemberName" />
                 <property name="ShadowType">In</property>
+                <property name="BorderWidth">3</property>
                 <child>
                   <widget class="Gtk.TreeView" id="treeview3">
                     <property name="MemberName" />
@@ -73,6 +75,7 @@
               <widget class="Gtk.ScrolledWindow" id="GtkScrolledWindow">
                 <property name="MemberName" />
                 <property name="ShadowType">In</property>
+                <property name="BorderWidth">3</property>
                 <child>
                   <widget class="Gtk.TextView" id="textviewChat">
                     <property name="MemberName" />
@@ -85,7 +88,7 @@
               </widget>
               <packing>
                 <property name="Position">0</property>
-                <property name="AutoSize">True</property>
+                <property name="AutoSize">False</property>
               </packing>
             </child>
             <child>
@@ -113,6 +116,7 @@
                     <property name="Type">TextOnly</property>
                     <property name="Label" translatable="yes">Send</property>
                     <property name="UseUnderline">True</property>
+                    <property name="BorderWidth">3</property>
                   </widget>
                   <packing>
                     <property name="Position">1</property>
