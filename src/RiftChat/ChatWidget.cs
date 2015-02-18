@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Net;
 using Gtk;
 using System.Collections.Generic;
+using rift.net.Models;
 
 namespace RiftChat
 {
@@ -12,6 +13,7 @@ namespace RiftChat
 	{
 		private const string LOGIN_LOGOUT = "LoginLogout";
 		private const string GUILD_CHAT = "GuildChat";
+		private const string SELF_GUILD_CHAT = "SelfChat";
 
 		public ChatWidget ()
 		{
@@ -38,12 +40,16 @@ namespace RiftChat
 			};
 		}
 
+		public Character Player { get; set; }
+
 		public event EventHandler<string> SendMessage;
 
 		public void MessageReceived (rift.net.Message message)
 		{
+			var tag = (message.Sender.Id.ToString() == Player.Id) ? SELF_GUILD_CHAT : GUILD_CHAT;
+
 			Application.Invoke (delegate {
-				WriteMessage (string.Format ("{0}: {1}", message.Sender.Name, message.Text), GUILD_CHAT);
+				WriteMessage (string.Format ("{0}: {1}", message.Sender.Name, message.Text), tag);
 			});
 		}
 
@@ -58,6 +64,11 @@ namespace RiftChat
 
 			tag = new TextTag (GUILD_CHAT);
 			tag.Weight = Pango.Weight.Normal;
+			tag.ForegroundGdk = new Gdk.Color (50, 205, 50);
+			tags.Add (tag);
+
+			tag = new TextTag (SELF_GUILD_CHAT);
+			tag.Weight = Pango.Weight.Bold;
 			tag.ForegroundGdk = new Gdk.Color (50, 205, 50);
 			tags.Add (tag);
 

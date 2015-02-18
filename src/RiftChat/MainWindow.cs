@@ -21,7 +21,7 @@ public partial class MainWindow: Gtk.Window
 
 		var sessionFactory = new SessionFactory ();
 
-		var session = sessionFactory.Login ("", "");
+		var session = sessionFactory.Login ("","");
 
 		var securedClient = new RiftClientSecured (session);
 
@@ -31,6 +31,9 @@ public partial class MainWindow: Gtk.Window
 		var guildies = securedClient.ListGuildmates (bruun.Guild.Id).OrderBy (x => x.Name).ToList();
 
 		chatClient = new RiftChatClient (session, bruun);
+
+		// Set the contact on the chat view
+		chatwidgetGuild.Player = bruun;
 
 		friendsController = new ContactController (chatClient) { View = (IContactView)treeview2, Model = friends };
 		guildiesController = new ContactController (chatClient) { View = (IContactView)treeview3, Model = guildies };

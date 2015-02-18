@@ -52,7 +52,7 @@ public partial class MainWindow
 		this.GtkScrolledWindow1.ShadowType = ((global::Gtk.ShadowType)(1));
 		this.GtkScrolledWindow1.BorderWidth = ((uint)(3));
 		// Container child GtkScrolledWindow1.Gtk.Container+ContainerChild
-		this.treeview2 = new ContactView();
+		this.treeview2 = new ContactView ();
 		this.treeview2.CanFocus = true;
 		this.treeview2.Name = "treeview2";
 		this.GtkScrolledWindow1.Add (this.treeview2);
@@ -65,7 +65,7 @@ public partial class MainWindow
 		this.GtkScrolledWindow2.ShadowType = ((global::Gtk.ShadowType)(1));
 		this.GtkScrolledWindow2.BorderWidth = ((uint)(3));
 		// Container child GtkScrolledWindow2.Gtk.Container+ContainerChild
-		this.treeview3 = new ContactView();
+		this.treeview3 = new ContactView ();
 		this.treeview3.CanFocus = true;
 		this.treeview3.Name = "treeview3";
 		this.GtkScrolledWindow2.Add (this.treeview3);
