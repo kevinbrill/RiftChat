@@ -7,6 +7,8 @@ namespace RiftChat.Common
 {
 	public interface IContactView
 	{
+		string ContactTypeName { get; set; }
+
 		bool IsOfflineVisible { get; set; }
 		bool IsWebVisible { get; set; }
 

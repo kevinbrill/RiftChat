@@ -86,9 +86,10 @@
     <Compile Include="gtk-gui\MainWindow.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ContactView.cs" />
     <Compile Include="ChatWidget.cs" />
     <Compile Include="gtk-gui\RiftChat.ChatWidget.cs" />
+    <Compile Include="ContactWidget.cs" />
+    <Compile Include="gtk-gui\RiftChat.ContactWidget.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

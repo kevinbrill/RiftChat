@@ -1,29 +1,45 @@
 ﻿using System;
 using RiftChat.Common;
 using Gtk;
-using rift.net.Models;
 using System.Collections.Generic;
-using System.Linq;
+using rift.net.Models;
 using rift.net;
+using System.ComponentModel;
 
 namespace RiftChat
 {
-	public class ContactView : TreeView, IContactView
+	[System.ComponentModel.ToolboxItem (true)]
+	public partial class ContactWidget : Gtk.Bin, IContactView
 	{
 		ListStore model = new ListStore(typeof(Contact));
 		Dictionary<string, TreeIter> iterators = new Dictionary<string, TreeIter>();
 		TreeModelFilter filter = null;
 
-		public ContactView ()
+		public ContactWidget ()
 		{
-			this.AppendColumn ("Name", new CellRendererText(), new TreeCellDataFunc(RenderContactName));
+			this.Build ();
+
+			this.treeviewContacts.AppendColumn ("Name", new CellRendererText(), new TreeCellDataFunc(RenderContactName));
 
 			IsOfflineVisible = false;
 			IsWebVisible = false;
 
+			this.togglebuttonMobile.Active = IsWebVisible;
+			this.togglebuttonOffline.Active = IsOfflineVisible;
+
 			filter = new TreeModelFilter (model, null);
 			filter.VisibleFunc = new TreeModelFilterVisibleFunc (FilterView);
-			this.Model = filter;
+			this.treeviewContacts.Model = filter;
+
+			this.togglebuttonMobile.Toggled += (sender, e) => {
+				IsWebVisible = this.togglebuttonMobile.Active;
+				filter.Refilter();
+			};
+
+			this.togglebuttonOffline.Toggled += (sender, e) => {
+				IsOfflineVisible = this.togglebuttonOffline.Active;
+				filter.Refilter();
+			};
 		}
 
 		#region IContactView implementation
@@ -69,6 +85,12 @@ namespace RiftChat
 
 		public bool IsWebVisible { get; set; }
 
+		public string ContactTypeName
+		{
+			get { return this.labelName.Text; }
+			set { this.labelName.Text = value; }
+		}
+
 		#endregion
 
 		private void RenderContactName( TreeViewColumn column, CellRenderer cell, TreeModel model, TreeIter iter )
@@ -108,3 +130,4 @@ namespace RiftChat
 		}
 	}
 }
+

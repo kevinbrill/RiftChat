@@ -35,8 +35,8 @@ public partial class MainWindow: Gtk.Window
 		// Set the contact on the chat view
 		chatwidgetGuild.Player = bruun;
 
-		friendsController = new ContactController (chatClient) { View = (IContactView)treeview2, Model = friends };
-		guildiesController = new ContactController (chatClient) { View = (IContactView)treeview3, Model = guildies };
+		friendsController = new ContactController (chatClient) { View = contactwidgetFriends, Model = friends };
+		guildiesController = new ContactController (chatClient) { View = contactwidgetGuildies, Model = guildies };
 
 		guildChatController = new ChatController (chatClient, ChatChannel.Guild) { View = chatwidgetGuild };
 
