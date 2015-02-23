@@ -209,6 +209,12 @@ namespace RiftChat
 				Console.WriteLine ("\t{0}", guildMate.Name);
 			}
 
+			var messages = chatClient.ListGuildChatHistory ().OrderByDescending(x=>x.ReceiveDateTime).Take(10).OrderBy(x=>x.ReceiveDateTime);
+
+			foreach (var message in messages) {
+				WriteMessage(string.Format("{0}: {1}", message.Sender.Name, message.Text), ConsoleColor.Green, message.ReceiveDateTime);
+			}
+
 			Console.ForegroundColor = currentColor;
 		}
 
