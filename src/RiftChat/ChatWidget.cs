@@ -10,7 +10,7 @@ using Ninject.Modules;
 namespace RiftChat
 {
 	[System.ComponentModel.ToolboxItem (true)]
-	public partial class ChatWidget : Gtk.Bin, IChatView, INinjectModule
+	public partial class ChatWidget : Gtk.Bin, IChatView
 	{
 		private const string LOGIN_LOGOUT = "LoginLogout";
 		private const string GUILD_CHAT = "GuildChat";

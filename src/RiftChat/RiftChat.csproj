@@ -94,6 +94,8 @@
     <Compile Include="ContactWidget.cs" />
     <Compile Include="gtk-gui\RiftChat.ContactWidget.cs" />
     <Compile Include="Ninjection.cs" />
+    <Compile Include="LoginWindow.cs" />
+    <Compile Include="gtk-gui\RiftChat.LoginWindow.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

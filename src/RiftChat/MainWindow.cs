@@ -21,7 +21,7 @@ public partial class MainWindow: Gtk.Window
 
 		var sessionFactory = new SessionFactory ();
 
-		var session = sessionFactory.Login ("","");
+		var session = sessionFactory.Login ("kevin.brill@gmail.com","Dormel is my wife");
 
 		var securedClient = new RiftClientSecured (session);
 
