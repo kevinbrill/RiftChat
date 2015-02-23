@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using rift.net.Models;
 using rift.net;
 using System.ComponentModel;
+using Ninject.Modules;
 
 namespace RiftChat
 {

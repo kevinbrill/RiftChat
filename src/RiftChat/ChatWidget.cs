@@ -5,11 +5,12 @@ using System.Net;
 using Gtk;
 using System.Collections.Generic;
 using rift.net.Models;
+using Ninject.Modules;
 
 namespace RiftChat
 {
 	[System.ComponentModel.ToolboxItem (true)]
-	public partial class ChatWidget : Gtk.Bin, IChatView
+	public partial class ChatWidget : Gtk.Bin, IChatView, INinjectModule
 	{
 		private const string LOGIN_LOGOUT = "LoginLogout";
 		private const string GUILD_CHAT = "GuildChat";

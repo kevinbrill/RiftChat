@@ -47,6 +47,9 @@
     <Reference Include="rift.net">
       <HintPath>..\packages\rift.net.1.0.5521.26978\lib\net45\rift.net.dll</HintPath>
     </Reference>
+    <Reference Include="Ninject">
+      <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -54,6 +57,11 @@
     <Compile Include="IContactView.cs" />
     <Compile Include="ChatController.cs" />
     <Compile Include="IChatView.cs" />
+    <Compile Include="LoginController.cs" />
+    <Compile Include="ILoginView.cs" />
+    <Compile Include="ProgramFlowController.cs" />
+    <Compile Include="MainController.cs" />
+    <Compile Include="IMainView.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
