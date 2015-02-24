@@ -1,15 +1,18 @@
 ﻿using System;
 using Ninject.Modules;
 using RiftChat.Common;
+using Castle.MicroKernel.Registration;
 
 namespace RiftChat
 {
-	public class Ninjection : NinjectModule
+	public class Ninjection : IWindsorInstaller
 	{
-		public override void Load ()
+		public void Install (Castle.Windsor.IWindsorContainer container, Castle.MicroKernel.SubSystems.Configuration.IConfigurationStore store)
 		{
-			Bind<IChatView>().To<ChatWidget> ();
-			Bind<IContactView> ().To<ContactWidget> ();
+			container.Register (Component.For<ILoginView> ().ImplementedBy<LoginWindow> ());
+			container.Register (Component.For<IChatView> ().ImplementedBy<ChatWidget> ());
+			container.Register (Component.For<IContactView> ().ImplementedBy<ContactWidget> ());
+			container.Register (Component.For<IMainView> ().ImplementedBy<MainWindow> ());
 		}
 	}
 }

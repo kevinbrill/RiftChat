@@ -54,6 +54,7 @@ namespace RiftChat
 			this.Title = global::Mono.Unix.Catalog.GetString ("LoginWindow");
 			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
 			this.BorderWidth = ((uint)(3));
+			this.Resizable = false;
 			// Container child RiftChat.LoginWindow.Gtk.Container+ContainerChild
 			this.vbox1 = new global::Gtk.VBox ();
 			this.vbox1.Name = "vbox1";

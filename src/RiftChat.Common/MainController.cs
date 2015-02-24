@@ -2,7 +2,9 @@
 using rift.net.Models;
 using System.Collections.Generic;
 using rift.net;
-using Ninject;
+using Castle.Windsor;
+using Castle.Windsor.Installer;
+using Castle.MicroKernel.Registration;
 
 namespace RiftChat.Common
 {
@@ -14,12 +16,14 @@ namespace RiftChat.Common
 		private ChatController _chatController;
 		private ContactController _friendsController;
 		private ContactController _guildiesController;
-		private IKernel kernel = new StandardKernel();
+		private WindsorContainer container;
 		private IMainView _view;
 
 		public MainController (Session session, Character character)
 		{
-			kernel.Load(AppDomain.CurrentDomain.GetAssemblies());
+			container = new WindsorContainer ();
+
+			container.Install (FromAssembly.InDirectory (new AssemblyFilter (".")));
 
 			_session = session;
 			_character = character;
@@ -44,17 +48,17 @@ namespace RiftChat.Common
 			client = new RiftChatClient (_session, _character);
 
 			_friendsController = new ContactController (client);
+			_friendsController.View = container.Resolve<IContactView>();
 			_friendsController.Model = Friends;
-			_friendsController.View = kernel.Get<IContactView>();
 
 			_guildiesController = new ContactController (client);
+			_guildiesController.View = container.Resolve<IContactView>();
 			_guildiesController.Model = Guildies;
-			_guildiesController.View = kernel.Get<IContactView>();
 
 			_chatController = new ChatController (client, ChatChannel.Guild);
-			_chatController.View = kernel.Get<IChatView>();
+			_chatController.View = container.Resolve<IChatView>();
 
-			_view = kernel.Get<IMainView> ();
+			_view = container.Resolve<IMainView> ();
 			_view.ChatView = _chatController.View;
 			_view.FriendsView = _friendsController.View;
 			_view.GuildiesView = _guildiesController.View;

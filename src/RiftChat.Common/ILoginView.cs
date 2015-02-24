@@ -25,6 +25,8 @@ namespace RiftChat.Common
 		}
 
 		void ShowView();
+		void CloseView();
+
 		void SetMessage( string message );
 		void SetCharacters( List<Character> characters );
 	}

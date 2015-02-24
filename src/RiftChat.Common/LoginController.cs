@@ -2,6 +2,7 @@
 using rift.net.Models;
 using rift.net;
 using log4net;
+using System.Linq;
 
 namespace RiftChat.Common
 {
@@ -27,6 +28,8 @@ namespace RiftChat.Common
 		{
 			Character = e;
 
+			_view.CloseView ();
+
 			if (CharacterSelected != null)
 				CharacterSelected (this, e);
 		}
@@ -44,7 +47,7 @@ namespace RiftChat.Common
 
 				var client = new RiftClientSecured(Session);
 
-				var characters = client.ListCharacters();
+				var characters = client.ListCharacters().OrderBy( x=>x.Shard.Name).ThenBy(x=>x.Name).ToList();
 
 				_view.SetCharacters( characters );
 

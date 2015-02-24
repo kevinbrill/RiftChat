@@ -1,15 +1,32 @@
 ﻿using System;
 using RiftChat.Common;
 using Gtk;
+using rift.net.Models;
 
 namespace RiftChat
 {
 	public partial class LoginWindow : Gtk.Window, ILoginView
 	{
+		private ListStore charactersModel = new ListStore (typeof(string), typeof(Character));
+
 		public LoginWindow () :
-			base (Gtk.WindowType.Toplevel)
+		base (Gtk.WindowType.Toplevel)
 		{
 			this.Build ();
+
+			var renderer = new CellRendererText ();
+			this.comboboxCharacters.PackStart (renderer, false);
+			this.comboboxCharacters.AddAttribute (renderer, "text", 0);
+
+			this.buttonLogin.Clicked += (sender, e) => {
+				if(Login != null )
+					Login( this, new EventArgs());
+			};
+
+			this.buttonCharacterSelect.Clicked += (sender, e) =>  {
+				if(CharacterSelected != null)
+					CharacterSelected( this, this.Character);
+			};
 		}
 
 		#region ILoginView implementation
@@ -23,6 +40,11 @@ namespace RiftChat
 			this.Show ();
 		}
 
+		public void CloseView()
+		{
+			this.Hide ();
+		}
+
 		public void SetMessage (string message)
 		{
 			throw new NotImplementedException ();
@@ -30,37 +52,40 @@ namespace RiftChat
 
 		public void SetCharacters (System.Collections.Generic.List<rift.net.Models.Character> characters)
 		{
-			var model = new TreeModel ();
+			charactersModel.Clear ();
 
-			this.comboboxCharacters.Clear ();
+			foreach (var character in characters) {
+				charactersModel.AppendValues (character.FullName, character);
+			}
 
-						throw new NotImplementedException ();
+			this.comboboxCharacters.Model = charactersModel;
 		}
 
 		public string UserName {
 			get {
-				throw new NotImplementedException ();
+				return this.entryUsername.Text;
 			}
 			set {
-				throw new NotImplementedException ();
+				this.entryUsername.Text = value;
 			}
 		}
 
 		public string Password {
 			get {
-				throw new NotImplementedException ();
+				return this.entryPassword.Text;
 			}
 			set {
-				throw new NotImplementedException ();
+				this.entryPassword.Text = value;
 			}
 		}
 
 		public rift.net.Models.Character Character {
 			get {
-				throw new NotImplementedException ();
+				TreeIter iter;
+				this.comboboxCharacters.GetActiveIter (out iter);
+				return (Character)this.comboboxCharacters.Model.GetValue (iter, 1);			
 			}
 			set {
-				throw new NotImplementedException ();
 			}
 		}
 

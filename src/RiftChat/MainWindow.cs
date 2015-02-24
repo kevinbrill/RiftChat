@@ -8,20 +8,22 @@ using System.Diagnostics;
 using rift.net.Models;
 using RiftChat.Common;
 
-public partial class MainWindow: Gtk.Window
+public partial class MainWindow: Gtk.Window, IMainView
 {
+	/*
 	private RiftChatClient chatClient;
 	ContactController friendsController;
 	ContactController guildiesController;
 	ChatController guildChatController;
+	*/
 
 	public MainWindow () : base (Gtk.WindowType.Toplevel)
 	{
 		Build ();
-
+		/*
 		var sessionFactory = new SessionFactory ();
 
-		var session = sessionFactory.Login ("kevin.brill@gmail.com","Dormel is my wife");
+		var session = sessionFactory.Login ("","");
 
 		var securedClient = new RiftClientSecured (session);
 
@@ -43,14 +45,39 @@ public partial class MainWindow: Gtk.Window
 		chatClient.Connect ();
 
 		chatClient.Listen ();
+		*/
 	}
 
 
 	protected void OnDeleteEvent (object sender, DeleteEventArgs a)
 	{
-		chatClient.Stop ();
+		//chatClient.Stop ();
 
 		Application.Quit ();
 		a.RetVal = true;
 	}
+
+	#region IMainView implementation
+
+	public void ShowView ()
+	{
+		Show ();
+	}
+
+	public IContactView FriendsView {
+		get;
+		set;
+	}
+
+	public IContactView GuildiesView {
+		get;
+		set;
+	}
+
+	public IChatView ChatView {
+		get;
+		set;
+	}
+
+	#endregion
 }

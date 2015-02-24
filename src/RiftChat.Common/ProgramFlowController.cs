@@ -1,7 +1,9 @@
 ﻿using System;
-using Ninject;
 using rift.net;
 using System.Linq;
+using Castle.Windsor;
+using Castle.Windsor.Installer;
+using Castle.MicroKernel.Registration;
 
 namespace RiftChat.Common
 {
@@ -9,17 +11,19 @@ namespace RiftChat.Common
 	{
 		private LoginController loginController;
 		private MainController mainController;
-		private IKernel kernel;
+		private WindsorContainer container;
+		private ILoginView loginView;
 
 		public ProgramFlowController ()
 		{
-			kernel = new StandardKernel ();
-			kernel.Load(AppDomain.CurrentDomain.GetAssemblies());
+			container = new WindsorContainer ();
+
+			container.Install (FromAssembly.InDirectory (new AssemblyFilter (".")));
 		}
 
 		public void Authenticate()
 		{
-			var loginView = kernel.Get<ILoginView> ();
+			loginView = container.Resolve<ILoginView> ();
 
 			loginController = new LoginController (loginView);
 			loginController.LoginSuccess += HandleLoginSuccess;

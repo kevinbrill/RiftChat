@@ -222,6 +222,7 @@
     <property name="Title" translatable="yes">LoginWindow</property>
     <property name="WindowPosition">CenterOnParent</property>
     <property name="BorderWidth">3</property>
+    <property name="Resizable">False</property>
     <child>
       <widget class="Gtk.VBox" id="vbox1">
         <property name="MemberName" />
