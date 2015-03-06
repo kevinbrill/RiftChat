@@ -49,14 +49,21 @@ namespace RiftChat.Common
 
 			_friendsController = new ContactController (client);
 			_friendsController.View = container.Resolve<IContactView>();
+			_friendsController.View.ContactTypeName = "Friends";
+			_friendsController.View.IsWebVisible = true;
+			_friendsController.View.IsOfflineVisible = false;
 			_friendsController.Model = Friends;
 
 			_guildiesController = new ContactController (client);
 			_guildiesController.View = container.Resolve<IContactView>();
+			_guildiesController.View.ContactTypeName = "Guildies";
+			_guildiesController.View.IsWebVisible = false;
+			_guildiesController.View.IsOfflineVisible = false;
 			_guildiesController.Model = Guildies;
 
 			_chatController = new ChatController (client, ChatChannel.Guild);
 			_chatController.View = container.Resolve<IChatView>();
+			_chatController.View.Player = _character;
 
 			_view = container.Resolve<IMainView> ();
 			_view.ChatView = _chatController.View;

@@ -10,12 +10,6 @@ public partial class MainWindow
 	private global::Gtk.HPaned hpaned1;
 	
 	private global::Gtk.VPaned vpaned1;
-	
-	private global::RiftChat.ContactWidget contactwidgetFriends;
-	
-	private global::RiftChat.ContactWidget contactwidgetGuildies;
-	
-	private global::RiftChat.ChatWidget chatwidgetGuild;
 
 	protected virtual void Build ()
 	{
@@ -41,32 +35,9 @@ public partial class MainWindow
 		this.vpaned1.CanFocus = true;
 		this.vpaned1.Name = "vpaned1";
 		this.vpaned1.Position = 236;
-		// Container child vpaned1.Gtk.Paned+PanedChild
-		this.contactwidgetFriends = new global::RiftChat.ContactWidget ();
-		this.contactwidgetFriends.Events = ((global::Gdk.EventMask)(256));
-		this.contactwidgetFriends.Name = "contactwidgetFriends";
-		this.contactwidgetFriends.IsOfflineVisible = false;
-		this.contactwidgetFriends.IsWebVisible = false;
-		this.contactwidgetFriends.ContactTypeName = "Friends";
-		this.vpaned1.Add (this.contactwidgetFriends);
-		global::Gtk.Paned.PanedChild w2 = ((global::Gtk.Paned.PanedChild)(this.vpaned1 [this.contactwidgetFriends]));
-		w2.Resize = false;
-		// Container child vpaned1.Gtk.Paned+PanedChild
-		this.contactwidgetGuildies = new global::RiftChat.ContactWidget ();
-		this.contactwidgetGuildies.Events = ((global::Gdk.EventMask)(256));
-		this.contactwidgetGuildies.Name = "contactwidgetGuildies";
-		this.contactwidgetGuildies.IsOfflineVisible = false;
-		this.contactwidgetGuildies.IsWebVisible = false;
-		this.contactwidgetGuildies.ContactTypeName = "Guildies";
-		this.vpaned1.Add (this.contactwidgetGuildies);
 		this.hpaned1.Add (this.vpaned1);
-		global::Gtk.Paned.PanedChild w4 = ((global::Gtk.Paned.PanedChild)(this.hpaned1 [this.vpaned1]));
-		w4.Resize = false;
-		// Container child hpaned1.Gtk.Paned+PanedChild
-		this.chatwidgetGuild = new global::RiftChat.ChatWidget ();
-		this.chatwidgetGuild.Events = ((global::Gdk.EventMask)(256));
-		this.chatwidgetGuild.Name = "chatwidgetGuild";
-		this.hpaned1.Add (this.chatwidgetGuild);
+		global::Gtk.Paned.PanedChild w2 = ((global::Gtk.Paned.PanedChild)(this.hpaned1 [this.vpaned1]));
+		w2.Resize = false;
 		this.Add (this.hpaned1);
 		if ((this.Child != null)) {
 			this.Child.ShowAll ();
@@ -74,6 +45,5 @@ public partial class MainWindow
 		this.DefaultWidth = 693;
 		this.DefaultHeight = 598;
 		this.Show ();
-		this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
 	}
 }

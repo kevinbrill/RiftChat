@@ -7,54 +7,13 @@ using System.Net;
 using System.Diagnostics;
 using rift.net.Models;
 using RiftChat.Common;
+using Castle.Core;
 
 public partial class MainWindow: Gtk.Window, IMainView
 {
-	/*
-	private RiftChatClient chatClient;
-	ContactController friendsController;
-	ContactController guildiesController;
-	ChatController guildChatController;
-	*/
-
 	public MainWindow () : base (Gtk.WindowType.Toplevel)
 	{
 		Build ();
-		/*
-		var sessionFactory = new SessionFactory ();
-
-		var session = sessionFactory.Login ("","");
-
-		var securedClient = new RiftClientSecured (session);
-
-		var bruun = securedClient.ListCharacters ().FirstOrDefault (x => x.FullName == "Bruun@Wolfsbane");
-
-		var friends = securedClient.ListFriends (bruun.Id).OrderBy (x => x.Name).ToList();
-		var guildies = securedClient.ListGuildmates (bruun.Guild.Id).OrderBy (x => x.Name).ToList();
-
-		chatClient = new RiftChatClient (session, bruun);
-
-		// Set the contact on the chat view
-		chatwidgetGuild.Player = bruun;
-
-		friendsController = new ContactController (chatClient) { View = contactwidgetFriends, Model = friends };
-		guildiesController = new ContactController (chatClient) { View = contactwidgetGuildies, Model = guildies };
-
-		guildChatController = new ChatController (chatClient, ChatChannel.Guild) { View = chatwidgetGuild };
-
-		chatClient.Connect ();
-
-		chatClient.Listen ();
-		*/
-	}
-
-
-	protected void OnDeleteEvent (object sender, DeleteEventArgs a)
-	{
-		//chatClient.Stop ();
-
-		Application.Quit ();
-		a.RetVal = true;
 	}
 
 	#region IMainView implementation
@@ -64,19 +23,43 @@ public partial class MainWindow: Gtk.Window, IMainView
 		Show ();
 	}
 
+	[DoNotWire]
 	public IContactView FriendsView {
-		get;
-		set;
+		get { return null; }
+		set {
+			var widget = (Widget)value;
+
+			widget.Visible = true;
+			widget.Events = ((global::Gdk.EventMask)(256));
+			widget.Name = "contactwidgetFriends";
+			this.vpaned1.Pack1 (widget, true, true);
+		}
 	}
 
+	[DoNotWire]
 	public IContactView GuildiesView {
-		get;
-		set;
+		get { return null; }
+		set {
+			var widget = (Widget)value;
+
+			widget.Visible = true;
+			widget.Events = ((global::Gdk.EventMask)(256));
+			widget.Name = "contactwidgetGuildies";
+			this.vpaned1.Pack2 (widget, true, true);
+		}
 	}
 
+	[DoNotWire]
 	public IChatView ChatView {
-		get;
-		set;
+		get { return null; }
+		set {
+			var widget = (Widget)value;
+
+			widget.Visible = true;
+			widget.Events = ((global::Gdk.EventMask)(256));
+			widget.Name = "chatWidgetGuild";
+			this.hpaned1.Pack2(widget, true, true);
+		}
 	}
 
 	#endregion

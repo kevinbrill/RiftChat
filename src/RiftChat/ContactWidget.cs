@@ -16,17 +16,14 @@ namespace RiftChat
 		Dictionary<string, TreeIter> iterators = new Dictionary<string, TreeIter>();
 		TreeModelFilter filter = null;
 
+		private bool _isWebVisible;
+		private bool _isOfflineVisible;
+
 		public ContactWidget ()
 		{
 			this.Build ();
 
 			this.treeviewContacts.AppendColumn ("Name", new CellRendererText(), new TreeCellDataFunc(RenderContactName));
-
-			IsOfflineVisible = false;
-			IsWebVisible = false;
-
-			this.togglebuttonMobile.Active = IsWebVisible;
-			this.togglebuttonOffline.Active = IsOfflineVisible;
 
 			filter = new TreeModelFilter (model, null);
 			filter.VisibleFunc = new TreeModelFilterVisibleFunc (FilterView);
@@ -82,9 +79,21 @@ namespace RiftChat
 			});
 		}
 
-		public bool IsOfflineVisible { get; set; }
+		public bool IsOfflineVisible {
+			get { return _isOfflineVisible; }
+			set {
+				_isOfflineVisible = value;
+				this.togglebuttonOffline.Active = value;
+			}
+		}
 
-		public bool IsWebVisible { get; set; }
+		public bool IsWebVisible { 
+			get { return _isWebVisible; }
+			set {
+				_isWebVisible = value;
+				this.togglebuttonMobile.Active = value;
+			}
+		}
 
 		public string ContactTypeName
 		{

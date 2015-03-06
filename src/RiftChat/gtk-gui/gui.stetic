@@ -32,25 +32,10 @@
             <property name="CanFocus">True</property>
             <property name="Position">236</property>
             <child>
-              <widget class="RiftChat.ContactWidget" id="contactwidgetFriends">
-                <property name="MemberName" />
-                <property name="Events">ButtonPressMask</property>
-                <property name="IsOfflineVisible">False</property>
-                <property name="IsWebVisible">False</property>
-                <property name="ContactTypeName">Friends</property>
-              </widget>
-              <packing>
-                <property name="Resize">False</property>
-              </packing>
+              <placeholder />
             </child>
             <child>
-              <widget class="RiftChat.ContactWidget" id="contactwidgetGuildies">
-                <property name="MemberName" />
-                <property name="Events">ButtonPressMask</property>
-                <property name="IsOfflineVisible">False</property>
-                <property name="IsWebVisible">False</property>
-                <property name="ContactTypeName">Guildies</property>
-              </widget>
+              <placeholder />
             </child>
           </widget>
           <packing>
@@ -58,10 +43,7 @@
           </packing>
         </child>
         <child>
-          <widget class="RiftChat.ChatWidget" id="chatwidgetGuild">
-            <property name="MemberName" />
-            <property name="Events">ButtonPressMask</property>
-          </widget>
+          <placeholder />
         </child>
       </widget>
     </child>
